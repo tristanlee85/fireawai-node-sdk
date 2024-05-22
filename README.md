@@ -20,7 +20,7 @@ This project is a Node.js server that provides a REST API to interact with the F
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/fireawai-node-api.git
+   git clone git@github.com:tristanlee85/fireawai-node-sdk.git
    cd fireawai-node-api
    ```
 
