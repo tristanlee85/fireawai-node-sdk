@@ -1,14 +1,14 @@
 # Fireaw.ai Node SDK
 
-This project is a Node.js server that provides a REST API to interact with the Fireaw.ai service, allowing clients to send messages and receive responses without needing to manage WebSocket connections directly. It can also be imported as a module in other Node.js projects.
+This project is a Node.js SDK for interacting with the Fireaw.ai service, providing functions to send messages and receive responses through WebSocket, without needing to manage WebSocket connections directly. It also includes an optional REST API server for interacting with the service.
 
 ## Features
 
-- REST API to send messages to a WebSocket.
+- Functions to connect to Fireaw.ai WebSocket.
+- Send messages and receive responses through WebSocket.
 - Handles WebSocket connection, subscription, and message parsing.
 - Configurable timeout for WebSocket connections.
-- Can be run in single request mode or continuous mode.
-- Can be imported as a module in other Node.js projects.
+- Optional REST API server for sending messages and receiving responses.
 
 ## Requirements
 
@@ -21,7 +21,7 @@ This project is a Node.js server that provides a REST API to interact with the F
 
    ```bash
    git clone git@github.com:tristanlee85/fireawai-node-sdk.git
-   cd fireawai-node-api
+   cd fireawai-node-sdk
    ```
 
 2. Install dependencies:
@@ -32,18 +32,59 @@ This project is a Node.js server that provides a REST API to interact with the F
 
 ## Configuration
 
+### Using Environment Variables
+
 Create a `.env` file in the root of the project and add the following environment variables:
 
 ```env
-PORT=3000
-API_KEY=your_api_key_here
-CHATBOT_ID=your_chatbot_id_here
+FIREAWAI_API_KEY=your_api_key_here
+FIREAWAI_CHATBOT_ID=your_chatbot_id_here
 WEBSOCKET_TIMEOUT=120000  # Optional, timeout in milliseconds (default is 2 minutes)
+```
+
+### Programmatic Configuration
+
+Alternatively, you can configure the SDK programmatically:
+
+```javascript
+const { setConfig } = require('fireawai-node-sdk');
+
+setConfig({
+  apiKey: 'your_api_key_here',
+  chatbotId: 'your_chatbot_id_here',
+  websocketTimeout: 120000, // Optional
+});
 ```
 
 ## Usage
 
-### Starting the Server
+### Using as a Module
+
+To create a connection and send a message to Fireaw.ai:
+
+```javascript
+const { connect, sendMessage, setConfig } = require('fireawai-node-sdk');
+
+// Optionally set configuration programmatically if not using environment variables
+setConfig({
+  apiKey: 'your_api_key_here',
+  chatbotId: 'your_chatbot_id_here',
+  port: 3000,
+  websocketTimeout: 120000, // Optional
+});
+
+(async () => {
+  try {
+    await connect();
+    const response = await sendMessage('your query');
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+})();
+```
+
+### Using the REST API
 
 You can start the server using the following command:
 
@@ -51,7 +92,7 @@ You can start the server using the following command:
 npm start
 ```
 
-### Sending a Query
+### Sending a Query Using the REST API
 
 To send a query using the REST API, you can use `curl` or any HTTP client. Here’s an example using `curl`:
 
@@ -60,46 +101,6 @@ curl -X POST http://localhost:3000/api/message \
   -H "Content-Type: application/json" \
   -d '{"message": "your query"}'
 ```
-
-### Using as a Module
-
-To use the API in another Node.js project:
-
-1. Install the package (assuming it's published on npm or use a local path if not):
-
-   ```bash
-   npm install fireawai-node-api
-   ```
-
-2. Import and use the functions:
-
-   ```javascript
-   import { connect, sendMessage } from 'fireawai-node-api';
-
-   (async () => {
-     try {
-       await connect();
-       const response = await sendMessage('your query');
-       console.log(response);
-     } catch (error) {
-       console.error(error);
-     }
-   })();
-   ```
-
-## Project Structure
-
-- `src/index.mjs`: Entry point for module exports.
-- `src/server.mjs`: Main server file.
-- `src/api.mjs`: API routes.
-- `src/websocket.mjs`: WebSocket handling logic.
-- `src/config.mjs`: Configuration loading.
-- `test/api.test.js`: Unit tests for the API.
-- `.env`: Environment variables.
-- `.gitignore`: Git ignore file.
-- `README.md`: Readme file.
-- `package.json`: NPM package file.
-- `package-lock.json`: NPM package-lock file.
 
 ## Dependencies
 

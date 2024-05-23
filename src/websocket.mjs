@@ -1,24 +1,32 @@
 import WebSocket from 'ws';
 import axios from 'axios';
-import config from './config.mjs';
+import { getConfig } from './config.mjs';
 
 let ws;
 let isSubscribed = false;
 let websocketId = '';
+
+const { apiKey, chatbotId, websocketUrl, authUrl } = getConfig();
 
 export async function connect() {
   if (websocketId) {
     return;
   }
 
+  if (!apiKey || !chatbotId) {
+    throw new Error(
+      'Missing required environment variables: `apiKey` and/or `chatbotId`'
+    );
+  }
+
   const authResponse = await axios.post(
-    config.authUrl,
-    { chat: { collection_id: config.chatbotId, include_context: true } },
+    authUrl,
+    { chat: { collection_id: chatbotId, include_context: true } },
     {
       headers: {
         Accept: '*/*',
         'Accept-Language': 'en-US,en;q=0.9',
-        Authorization: config.apiKey,
+        Authorization: apiKey,
         'Cache-Control': 'no-cache',
         'Content-Type': 'application/json',
       },
@@ -31,7 +39,7 @@ export async function connect() {
 
 function connectWebSocket() {
   return new Promise((resolve, reject) => {
-    ws = new WebSocket(config.websocketUrl);
+    ws = new WebSocket(websocketUrl);
 
     ws.on('open', () => {
       console.log('WebSocket connection established');
