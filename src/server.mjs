@@ -1,9 +1,7 @@
-// src/server.mjs
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import config from './config.mjs';
-import { connect, sendMessage } from './websocket.cjs';
+import { connect, sendMessage } from './websocket.mjs';
 
 const app = express();
 

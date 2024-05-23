@@ -2,7 +2,7 @@ import express from 'express';
 import {
   authorizeWebSocketConnection,
   sendWebSocketMessage,
-} from './websocket.cjs';
+} from './websocket.mjs';
 import config from './config.mjs';
 
 const router = express.Router();
