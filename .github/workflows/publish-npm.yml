@@ -30,13 +30,12 @@ jobs:
       # - name: Run tests
       #   run: npm test
 
-      # - name: Configure Git for GitHub Actions
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      #   run: |
-      #     git config --global user.name "${{ github.actor }}"
-      #     git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-      #     git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.repository }}.git
+      - name: Configure Git for GitHub Actions
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Publish to npm
         env:
