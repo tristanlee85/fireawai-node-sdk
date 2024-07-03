@@ -2,13 +2,19 @@
   "name": "fireawai-node-sdk",
   "version": "1.0.0",
   "description": "A Node.js SDK for interacting with the Fireaw.ai service. Provides an API to send messages and receive responses through WebSocket, along with utility functions to streamline integration with Fireaw.ai.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tristanlee85/fireawai-node-sdk.git"
+  },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "node src/server.mjs",
     "test": "jest",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "release": "standard-version",
+    "publish:all": "npm run release && npm publish"
   },
   "keywords": [],
   "author": "Tristan Lee",
@@ -31,7 +37,8 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "rollup": "^2.79.1",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "standard-version": "^9.5.0"
   },
   "jest": {
     "transform": {

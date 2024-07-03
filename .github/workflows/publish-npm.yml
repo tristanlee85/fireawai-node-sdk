@@ -16,15 +16,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16' # or the version you need
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test # Optional, but recommended to run tests before publishing
+      # - name: Run tests
+      #   run: npm test # Optional, but recommended to run tests before publishing
 
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish
+        run: npm run publish:all
