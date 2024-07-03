@@ -1,6 +1,6 @@
 {
   "name": "fireawai-node-sdk",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "A Node.js SDK for interacting with the Fireaw.ai service. Provides an API to send messages and receive responses through WebSocket, along with utility functions to streamline integration with Fireaw.ai.",
   "repository": {
     "type": "git",
