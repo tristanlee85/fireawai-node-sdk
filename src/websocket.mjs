@@ -6,7 +6,8 @@ let ws;
 let isSubscribed = false;
 let websocketId = '';
 
-const { apiKey, chatbotId, websocketUrl, authUrl } = getConfig();
+const { apiKey, chatbotId, websocketUrl, authUrl, websocketTimeout } =
+  getConfig();
 
 export async function connect() {
   if (websocketId) {
@@ -34,7 +35,7 @@ export async function connect() {
   );
 
   websocketId = authResponse.data.id;
-  await connectWebSocket();
+  return connectWebSocket();
 }
 
 function connectWebSocket() {
@@ -61,12 +62,11 @@ function connectWebSocket() {
         console.log('Subscription confirmed');
         isSubscribed = true;
         resolve();
-      } else {
-        console.log('Received message:', data.toString());
       }
     });
 
     ws.on('error', (error) => {
+      console.error('WebSocket connection error:', error);
       reject(error);
     });
 
@@ -97,21 +97,22 @@ export function sendMessage(message) {
       }),
     };
 
+    console.log('Sending message:', message);
+
     ws.send(JSON.stringify(messageData));
 
     const startTime = Date.now();
     const timeout = setTimeout(() => {
       ws.close();
       reject('WebSocket connection timed out');
-    }, config.websocketTimeout);
+    }, websocketTimeout);
 
     ws.on('message', (data) => {
       const parsedData = JSON.parse(data.toString());
-      const { content, context, finished } = parsedData.message?.message || {};
+      const { content, finished } = parsedData.message?.message || {};
 
-      // console.log('Received message:', parsedData);
-
-      if (finished && content && context) {
+      if (finished && content) {
+        console.log('Received response:', content);
         clearTimeout(timeout);
         resolve(parsedData);
         ws.close();
